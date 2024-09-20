@@ -14,7 +14,7 @@ const app = express();
 
 // Allow specific URL for CORS
 const corsOptions = {
-    origin: 'https://store-reactjs-frontend.vercel.app/',
+    origin: 'https://store-reactjs-frontend.vercel.app',
     optionsSuccessStatus: 200 // For older browsers compatibility
   };
 
