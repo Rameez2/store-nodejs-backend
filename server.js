@@ -11,10 +11,10 @@ const app = express();
 
 // Allow all origins
 app.use(cors({
-    origin: '*',  // Allows requests from any origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Specify allowed methods if needed
-    allowedHeaders: ['Content-Type', 'Authorization'],  // Specify allowed headers if needed
-    optionsSuccessStatus: 200  // For legacy browser support
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 200
 }));
 
 // Serve static files from the "public" directory
@@ -27,12 +27,15 @@ app.use(express.json())
 app.use('/api/auth', authRoutes);
 app.use('/api', profileRoutes);
 
-// Connect to MongoDB and start the server only if the connection succeeds
+// Try to connect to MongoDB
 connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`Server listening on port http://localhost:${PORT}`);
-    });
+    console.log('MongoDB connected successfully');
 }).catch((err) => {
-    console.error("Failed to connect to the database. Server not started.");
-    process.exit(1);  // Exit process with failure code if DB connection fails
+    console.error('MongoDB connection error:', err);
+    // Do not exit, just log the error. The function will terminate naturally after handling the request
+});
+
+// Start the server (for local testing, on Vercel this is handled per request)
+app.listen(PORT, () => {
+    console.log(`Server listening on port http://localhost:${PORT}`);
 });
