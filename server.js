@@ -3,12 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require("./src/routes/authRoutes");
 const profileRoutes = require("./src/routes/profileRoutes");
-// const verificationRoutes = require("./src/routes/verificationRoute");
-// const adminRoutes = require("./src/routes/adminRoutes");
 const path = require('path');
 require('dotenv').config();
-// DB Connection
-require("./src/config/dbConnection")();
+const connectDB = require("./src/config/dbConnection"); // Import the connectDB function
 
 const app = express();
 
@@ -20,7 +17,6 @@ app.use(cors({
     optionsSuccessStatus: 200  // For legacy browser support
 }));
 
-
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, '/src/public')));
 
@@ -28,14 +24,15 @@ app.use(express.static(path.join(__dirname, '/src/public')));
 app.use(express.json())
 
 // ROUTERS
-app.use('/api/auth',authRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api', profileRoutes);
 
-app.use('/api',profileRoutes);
-
-// app.use('/api',verificationRoutes);
-
-// app.use('/api/admin',adminRoutes);
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port http://localhost:${PORT}`);
+// Connect to MongoDB and start the server only if the connection succeeds
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server listening on port http://localhost:${PORT}`);
+    });
+}).catch((err) => {
+    console.error("Failed to connect to the database. Server not started.");
+    process.exit(1);  // Exit process with failure code if DB connection fails
 });

@@ -32,7 +32,6 @@ exports.register = async (req, res) => {
             { _id: user._id,verificationStatus:user.verificationStatus },  // Use the user ID directly inside the payload
             process.env.JWT_SECRET_KEY,  // Secret key from environment variables
             { expiresIn: 20000 }  // Token expiration time
-            // { expiresIn: process.env.TOKEN_EXPIRE_TIME }  // Token expiration time
         );
 
         // Send the token as a response
@@ -64,7 +63,6 @@ exports.login = async (req, res) => {
             { _id: user._id,verificationStatus:user.verificationStatus },  // Use the user ID directly inside the payload
             process.env.JWT_SECRET_KEY,  // Secret key from environment variables
             { expiresIn: 20000 }  // Token expiration time
-            // { expiresIn: process.env.TOKEN_EXPIRE_TIME }  // Token expiration time
         );
 
         // Send the token as a response
