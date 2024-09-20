@@ -12,8 +12,13 @@ require("./src/config/dbConnection")();
 
 const app = express();
 
-// Enable CORS for all routes
-app.use(cors());
+// Allow specific URL for CORS
+const corsOptions = {
+    origin: 'https://store-reactjs-frontend.vercel.app/',
+    optionsSuccessStatus: 200 // For older browsers compatibility
+  };
+
+app.use(cors(corsOptions));
 
 
 // Serve static files from the "public" directory
