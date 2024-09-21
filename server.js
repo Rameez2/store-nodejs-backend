@@ -3,6 +3,9 @@ const express = require('express');
 const cors = require('cors');
 const authRoutes = require("./src/routes/authRoutes");
 const profileRoutes = require("./src/routes/profileRoutes");
+const productRoutes = require("./src/routes/productRoutes");
+const adminProducts = require("./src/routes/admin/AdminProductRoutes");
+const adminUsers = require("./src/routes/admin/AdminUserRoutes");
 const path = require('path');
 require('dotenv').config();
 const connectDB = require("./src/config/dbConnection"); // Import the connectDB function
@@ -18,14 +21,19 @@ app.use(cors({
 }));
 
 // Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, '/src/public')));
+app.use(express.static(path.join(__dirname, '/src/public'))); 
 
 // Middlewares
-app.use(express.json())
+app.use(express.json());
 
 // ROUTERS
 app.use('/api/auth', authRoutes);
 app.use('/api', profileRoutes);
+app.use('/api', productRoutes);
+// ADMIN ROUTES
+app.use('/api/admin', adminProducts);
+app.use('/api/admin', adminUsers);
+
 
 // Try to connect to MongoDB
 connectDB().then(() => {

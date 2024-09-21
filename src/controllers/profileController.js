@@ -23,11 +23,10 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     try {
-        
         // Find the user by ID from the token payload
         const user = await User.findById(req.user._id);
         if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
+            return res.status(404).json({ error: 'User not found' });
         }
 
         // Check if current password and new password are provided
@@ -36,7 +35,7 @@ exports.updateProfile = async (req, res) => {
             // Check if the current password matches
             const isMatch = await bcrypt.compare(currentPassword, user.password);
             if (!isMatch) {
-                return res.status(400).json({ msg: 'Current password is incorrect' });
+                return res.status(400).json({ error: 'Current password is incorrect' });
             }
     
             // Hash the new password
@@ -73,6 +72,6 @@ exports.updateProfile = async (req, res) => {
 
     } catch (error) {
         console.error(error);
-        return res.status(500).send('Server error');
+        return res.status(500).json({error:'Server Error'});
     }
 };
